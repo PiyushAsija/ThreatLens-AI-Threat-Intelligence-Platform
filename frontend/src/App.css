@@ -1,0 +1,172 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body, #root { height: 100%; }
+
+/* ─── THREATLENS THEME — Cyber Navy & Cobalt ──────────────────────────────────
+   Inspired by cybersecurity brand references: deep navy-black backgrounds,
+   a richer saturated cobalt blue (not pastel), red reserved strictly for
+   critical/alert states. Supports light + dark via [data-theme] attribute.
+─────────────────────────────────────────────────────────────────────────── */
+
+/* ─── DARK THEME (default) ────────────────────────────────────────────────── */
+:root,
+[data-theme="dark"] {
+  --bg-0: #070a12;
+  --bg-1: #0c1020;
+  --bg-2: #11162a;
+  --bg-card: #0f1322;
+  --bg-card2: #161b30;
+
+  --border: rgba(140, 160, 255, 0.08);
+  --border-strong: rgba(140, 160, 255, 0.18);
+  --border-accent: rgba(58, 99, 255, 0.40);
+
+  --text-0: #f4f6fb;
+  --text-1: #aab3c8;
+  --text-2: #69718a;
+  --text-3: #343b52;
+
+  --accent: #3a63ff;
+  --accent-2: #7c9bff;
+  --accent-dim: rgba(58, 99, 255, 0.12);
+  --accent-glow: rgba(58, 99, 255, 0.35);
+  --accent-text: #ffffff;
+
+  --critical: #ff4d4d;
+  --critical-dim: rgba(255,77,77,0.10);
+  --critical-border: rgba(255,77,77,0.38);
+
+  --malicious: #f97316;
+  --malicious-dim: rgba(249,115,22,0.10);
+  --malicious-border: rgba(249,115,22,0.35);
+
+  --suspicious: #eab308;
+  --suspicious-dim: rgba(234,179,8,0.10);
+  --suspicious-border: rgba(234,179,8,0.35);
+
+  --clean: #22c55e;
+  --clean-dim: rgba(34,197,94,0.10);
+  --clean-border: rgba(34,197,94,0.35);
+
+  --bg-vignette: radial-gradient(ellipse 70% 45% at 50% -8%, rgba(58,99,255,0.10) 0%, transparent 65%);
+  --shadow-card: 0 1px 0 rgba(255,255,255,0.03) inset, 0 8px 24px -8px rgba(0,0,0,0.6);
+}
+
+/* ─── LIGHT THEME ──────────────────────────────────────────────────────────── */
+[data-theme="light"] {
+  --bg-0: #f6f7fb;
+  --bg-1: #ffffff;
+  --bg-2: #eef0f7;
+  --bg-card: #ffffff;
+  --bg-card2: #f5f6fa;
+
+  --border: rgba(20, 30, 70, 0.08);
+  --border-strong: rgba(20, 30, 70, 0.15);
+  --border-accent: rgba(58, 99, 255, 0.30);
+
+  --text-0: #0c1228;
+  --text-1: #424a63;
+  --text-2: #767e96;
+  --text-3: #aab0c4;
+
+  --accent: #3151e0;
+  --accent-2: #5b78ee;
+  --accent-dim: rgba(49, 81, 224, 0.08);
+  --accent-glow: rgba(49, 81, 224, 0.22);
+  --accent-text: #ffffff;
+
+  --critical: #dc2626;
+  --critical-dim: rgba(220,38,38,0.08);
+  --critical-border: rgba(220,38,38,0.28);
+
+  --malicious: #ea580c;
+  --malicious-dim: rgba(234,88,12,0.08);
+  --malicious-border: rgba(234,88,12,0.28);
+
+  --suspicious: #ca8a04;
+  --suspicious-dim: rgba(202,138,4,0.08);
+  --suspicious-border: rgba(202,138,4,0.28);
+
+  --clean: #16a34a;
+  --clean-dim: rgba(22,163,74,0.08);
+  --clean-border: rgba(22,163,74,0.28);
+
+  --bg-vignette: radial-gradient(ellipse 70% 45% at 50% -8%, rgba(49,81,224,0.06) 0%, transparent 65%);
+  --shadow-card: 0 1px 0 rgba(255,255,255,0.7) inset, 0 8px 20px -10px rgba(12,18,40,0.10);
+}
+
+:root {
+  --font-mono: 'IBM Plex Mono', 'Courier New', monospace;
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-body: 'Inter', sans-serif;
+}
+
+body {
+  background: var(--bg-0);
+  color: var(--text-1);
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  background-image: var(--bg-vignette);
+  background-attachment: fixed;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+* {
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--bg-1); }
+::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 3px; }
+
+@keyframes fadeInUp { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
+@keyframes fadeIn   { from { opacity:0; } to { opacity:1; } }
+@keyframes spin     { to { transform:rotate(360deg); } }
+@keyframes pulse    { 0%,100% { opacity:1; } 50% { opacity:0.35; } }
+@keyframes blink    { 0%,100% { opacity:1; } 50% { opacity:0; } }
+@keyframes radarSweep { to { transform:rotate(360deg); } }
+@keyframes ping { 0% { transform:scale(1); opacity:0.8; } 100% { transform:scale(2.5); opacity:0; } }
+@keyframes glowPulse {
+  0%,100% { box-shadow: 0 0 0 rgba(255,77,77,0); }
+  50%      { box-shadow: 0 0 22px var(--critical-border); }
+}
+
+.animate-in { animation: fadeInUp 0.4s ease both; }
+
+.card-elevated {
+  border-radius: 12px;
+  box-shadow: var(--shadow-card);
+}
+
+/* ─── Theme toggle switch ──────────────────────────────────────────────────── */
+.theme-toggle {
+  position: relative;
+  width: 52px;
+  height: 28px;
+  border-radius: 14px;
+  background: var(--bg-2);
+  border: 1px solid var(--border-strong);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 3px;
+  flex-shrink: 0;
+}
+.theme-toggle .knob {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  transition: transform 0.25s cubic-bezier(0.4,0,0.2,1);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+[data-theme="light"] .theme-toggle .knob {
+  transform: translateX(22px);
+}

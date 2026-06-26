@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+*/node_modules/
+
+# Environment — NEVER push these
+.env
+.env.local
+.env.production
+backend/.env
+frontend/.env
+
+# Build output
+dist/
+build/
+*/dist/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+logs/
+
+# Editor
+.vscode/
+.idea/
