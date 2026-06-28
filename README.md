@@ -210,6 +210,9 @@ All colors are defined as CSS custom properties under `[data-theme="dark"]` and 
 
 ---
 
+**Why origin-based access control instead of an API key?**
+A client-side API key looks like authentication but isn't — any value sent from browser JavaScript is visible to anyone via DevTools → Network, no matter what CORS settings restrict it server-side. Instead, `/api/analyze` checks the `Origin` header against an allowlist of deployed frontend URLs. Browsers attach this header automatically and a normal page can't forge it, which blocks casual scraping and quota abuse — the actual threat model here, since there's no per-user data to protect, only a shared API quota. It is not equivalent to real authentication (a determined attacker can still spoof `Origin` with `curl`), and that tradeoff is intentional and documented rather than hidden.
+
 ## Deployment (Both Free)
 
 ### Backend — Render
