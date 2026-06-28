@@ -35,14 +35,14 @@ ThreatLens does the same thing for free.
 
 ## Tech Stack
 
-| Layer | Technology | Why |
-|---|---|---|
-| Frontend | React + Vite | Fast SPA with a Cyber Navy & Cobalt dashboard aesthetic, light/dark theme support |
-| Backend | Node.js + Express | Lightweight REST API with parallel API orchestration |
-| AI Engine | Llama 3.3 70B via Groq | Free tier, JSON mode, excellent reasoning for threat synthesis |
-| Threat Intel | AbuseIPDB + VirusTotal + AlienVault OTX + URLhaus + IPInfo | 5 complementary free sources covering all IOC types |
-| Security | Helmet + express-rate-limit | OWASP-aligned headers and quota protection |
-| Deployment | Vercel (frontend) + Render (backend) | Free CI/CD pipeline |
+| Layer        | Technology                                                 | Why                                                                               |
+| ------------ | ---------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| Frontend     | React + Vite                                               | Fast SPA with a Cyber Navy & Cobalt dashboard aesthetic, light/dark theme support |
+| Backend      | Node.js + Express                                          | Lightweight REST API with parallel API orchestration                              |
+| AI Engine    | Llama 3.3 70B via Groq                                     | Free tier, JSON mode, excellent reasoning for threat synthesis                    |
+| Threat Intel | AbuseIPDB + VirusTotal + AlienVault OTX + URLhaus + IPInfo | 5 complementary free sources covering all IOC types                               |
+| Security     | Helmet + express-rate-limit                                | OWASP-aligned headers and quota protection                                        |
+| Deployment   | Vercel (frontend) + Render (backend)                       | Free CI/CD pipeline                                                               |
 
 ---
 
@@ -56,13 +56,13 @@ A theme toggle in the header switches between dark mode (default) and a clean li
 
 ## IOC Types Supported
 
-| Type | Detection | Sources Queried |
-|------|-----------|-----------------|
-| IPv4 Address | Regex: `(\d{1,3}\.){3}\d{1,3}` | AbuseIPDB + VirusTotal + AlienVault OTX + IPInfo + URLhaus |
-| Domain | Valid hostname format | VirusTotal + AlienVault OTX + URLhaus |
-| URL | Starts with `http://` or `https://` | URLhaus + VirusTotal + AlienVault OTX |
-| MD5 Hash | 32 hex characters | VirusTotal + AlienVault OTX + URLhaus |
-| SHA256 Hash | 64 hex characters | VirusTotal + AlienVault OTX + URLhaus |
+| Type         | Detection                           | Sources Queried                                            |
+| ------------ | ----------------------------------- | ---------------------------------------------------------- |
+| IPv4 Address | Regex: `(\d{1,3}\.){3}\d{1,3}`      | AbuseIPDB + VirusTotal + AlienVault OTX + IPInfo + URLhaus |
+| Domain       | Valid hostname format               | VirusTotal + AlienVault OTX + URLhaus                      |
+| URL          | Starts with `http://` or `https://` | URLhaus + VirusTotal + AlienVault OTX                      |
+| MD5 Hash     | 32 hex characters                   | VirusTotal + AlienVault OTX + URLhaus                      |
+| SHA256 Hash  | 64 hex characters                   | VirusTotal + AlienVault OTX + URLhaus                      |
 
 ---
 
@@ -99,14 +99,14 @@ threatlens/
 
 ### Step 1 — Get all 5 free API keys
 
-| API | Sign up at | Free limit |
-|-----|-----------|------------|
-| AbuseIPDB | abuseipdb.com → Account → API | 1,000 checks/day |
-| AlienVault OTX | otx.alienvault.com | Unlimited |
-| VirusTotal | virustotal.com → Profile → API key | 500 lookups/day |
-| IPInfo | ipinfo.io → Get API Token | 50,000/month |
-| Groq | console.groq.com | 14,400/day |
-| URLhaus | No key needed | Unlimited |
+| API            | Sign up at                         | Free limit       |
+| -------------- | ---------------------------------- | ---------------- |
+| AbuseIPDB      | abuseipdb.com → Account → API      | 1,000 checks/day |
+| AlienVault OTX | otx.alienvault.com                 | Unlimited        |
+| VirusTotal     | virustotal.com → Profile → API key | 500 lookups/day  |
+| IPInfo         | ipinfo.io → Get API Token          | 50,000/month     |
+| Groq           | console.groq.com                   | 14,400/day       |
+| URLhaus        | No key needed                      | Unlimited        |
 
 ### Step 2 — Run the backend
 
@@ -197,10 +197,11 @@ All colors are defined as CSS custom properties under `[data-theme="dark"]` and 
 
 > Tested using the same manual methodology as InsightGuard — Burp Suite, custom payloads, npm audit, and DevTools inspection. Re-verify against your own deployed instance before treating this as a final audit.
 
-| Category | Status | Notes |
-|----------|--------|-------|
-| A01 — Broken Access Control | ✅ PASS | Rate limiting prevents quota abuse |
-| A02 — Cryptographic Failures | ✅ PASS | All API keys in `.env`, never in frontend bundle |
+| Category                    | Status  | Notes                                                                                                                                                                                                                                         |
+| --------------------------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| A01 — Broken Access Control | ✅ PASS | Origin-based validation blocks any request without an authorized `Origin` header — tested via `curl` from both Windows and Kali with no `-H "Origin: ..."`, returns `403 UNAUTHORIZED_ORIGIN`. Rate limiting (10 req/min) adds a second layer |
+
+| A02 — Cryptographic Failures | ✅ PASS | Confirmed zero key strings in `frontend/dist` build output (`grep`/`findstr`) and `.env` never appears in git history (`git log --all --full-history -- "**/.env"`). Deliberately avoided a client-side `X-API-Key` header — any header sent from the browser is visible in DevTools → Network regardless of CORS config, so it provides no real protection once deployed |
 | A03 — Injection | ✅ PASS | IOC validated by regex before any API call |
 | A05 — Security Misconfiguration | ✅ PASS | Helmet sets 14 secure headers |
 | A07 — Rate Limiting | ✅ PASS | 10 req/min per IP via express-rate-limit |
@@ -212,12 +213,14 @@ All colors are defined as CSS custom properties under `[data-theme="dark"]` and 
 ## Deployment (Both Free)
 
 ### Backend — Render
+
 1. Push to GitHub
 2. render.com → New Web Service → Connect repo
 3. Root: `backend` | Start: `node index.js`
 4. Add environment variables: `ABUSEIPDB_KEY`, `OTX_KEY`, `VT_KEY`, `IPINFO_KEY`, `GROQ_KEY`, `NODE_ENV=production`, `FRONTEND_URL=<vercel url>`
 
 ### Frontend — Vercel
+
 1. vercel.com → New Project → Import repo
 2. Root: `frontend`
 3. Add `VITE_API_URL=<render backend url>`
@@ -234,5 +237,5 @@ All colors are defined as CSS custom properties under `[data-theme="dark"]` and 
 
 ---
 
-*Llama 3.3 70B inference by Groq · MITRE ATT&CK® is a registered trademark of The MITRE Corporation*
-*Sources: AbuseIPDB · VirusTotal · AlienVault OTX · URLhaus · IPInfo*
+_Llama 3.3 70B inference by Groq · MITRE ATT&CK® is a registered trademark of The MITRE Corporation_
+_Sources: AbuseIPDB · VirusTotal · AlienVault OTX · URLhaus · IPInfo_
